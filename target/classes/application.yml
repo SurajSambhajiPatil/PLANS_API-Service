@@ -1,0 +1,34 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: 01_PLANS_API
+  datasource:
+    database-platform: org.hibernate.dialect.H2Dialect
+    driverClassName: org.h2.Driver
+    password: sa
+    url: jdbc:h2:mem:testdb
+    username: sa
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+plan-api:
+  messages:
+    planSaveSucc: Plan Saved Successfully
+    planSaveFail: Plan Save Failed
+    planUpdateSucc: Plan Updated Successfully
+    planUpdateFail: Plan Updated Failed
+    planDeleteSucc: Plan Deleted Successfully
+    planDeleteFail: Plan Delete Failed
+    planStatusChange: Plan Status Changed Successfully
+    planStatusChangeFail: Plan Status Changed Failed
+    
+
+    
+    
+    
