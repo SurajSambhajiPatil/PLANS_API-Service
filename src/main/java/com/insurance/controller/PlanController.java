@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.insurance.constants.ApiUrl;
 import com.insurance.constants.AppConstants;
 import com.insurance.entity.Plan;
 import com.insurance.props.AppProperties;
@@ -22,77 +23,77 @@ public class PlanController {
 
 	private IPlanService planService;
 	private Map<String, String> messages;
-	
+
 	public PlanController(IPlanService planService, AppProperties appProperties) {
 		super();
 		this.planService = planService;
 		this.messages = appProperties.getMessages();
 	}
 
-	@GetMapping("/categories")
-	public ResponseEntity<Map<Integer,String>> getPlanCategory(){
-		Map<Integer,String> allPlanCategories = planService.getAllPlanCategories();
+	@GetMapping(ApiUrl.PLAN_CATEGORIES)
+	public ResponseEntity<Map<Integer, String>> getPlanCategory() {
+		Map<Integer, String> allPlanCategories = planService.getAllPlanCategories();
 		return new ResponseEntity<>(allPlanCategories, HttpStatus.OK);
 	}
 
-	@GetMapping("/plan")
-	public ResponseEntity<Plan> getPlanById(@PathVariable int planId){
+	@GetMapping(ApiUrl.GET_PLAN)
+	public ResponseEntity<Plan> getPlanById(@PathVariable int planId) {
 		Plan planById = planService.getPlanByID(planId);
-		return new ResponseEntity<>(planById,HttpStatus.OK);
+		return new ResponseEntity<>(planById, HttpStatus.OK);
 	}
 
-	@PostMapping("/save")
-	public ResponseEntity<String> savePlan(@RequestBody Plan plan){
-		
+	@PostMapping(ApiUrl.PLAN_SAVE)
+	public ResponseEntity<String> savePlan(@RequestBody Plan plan) {
+
 		boolean upsertPlan = planService.upsertPlan(plan);
 		String planMsg = AppConstants.EMPTY_STR;
-		if(upsertPlan) {
+		if (upsertPlan) {
 			planMsg = "Plan Saved Successfully..";
-		}else {
+		} else {
 			planMsg = "Plan Not Saved..";
 		}
-		return new ResponseEntity<>(planMsg,HttpStatus.CREATED);
+		return new ResponseEntity<>(planMsg, HttpStatus.CREATED);
 	}
 
-	@PostMapping("/update/{planID}")
-	public ResponseEntity<String> updatePlan(@RequestBody Plan plan){
+	@PostMapping(ApiUrl.UPDATE_PLAN)
+	public ResponseEntity<String> updatePlan(@RequestBody Plan plan) {
 		boolean upsertPlan = planService.upsertPlan(plan);
-		String planMsg ;
-		if(upsertPlan) {
+		String planMsg;
+		if (upsertPlan) {
 			planMsg = "Plan updated Successfully..";
-		}else {
+		} else {
 			planMsg = "Plan Not updated..";
 		}
-		return new ResponseEntity<>(planMsg,HttpStatus.CREATED);
+		return new ResponseEntity<>(planMsg, HttpStatus.CREATED);
 	}
 
-	@DeleteMapping("/delete")
-	public ResponseEntity<String> deletePlan(@PathVariable Integer planId){
+	@DeleteMapping(ApiUrl.DELETE_PLAN)
+	public ResponseEntity<String> deletePlan(@PathVariable Integer planId) {
 		boolean deletePlanById = planService.deletePlanById(planId);
-		String planMsg ;
-		if(deletePlanById) {
+		String planMsg;
+		if (deletePlanById) {
 			planMsg = "Plan updated Successfully..";
-		}else {
+		} else {
 			planMsg = "Plan Not updated..";
 		}
-		return new ResponseEntity<>(planMsg,HttpStatus.CREATED);
-	}
-	
-	@GetMapping("/plan/{planId}")
-	public ResponseEntity<Plan> editPlan(@PathVariable Integer planId){
-		Plan plan = planService.getPlanByID(planId);
-		return new ResponseEntity<>(plan,HttpStatus.OK);
+		return new ResponseEntity<>(planMsg, HttpStatus.CREATED);
 	}
 
-	@PutMapping("/status-change/{planId}/{status}")
-	public ResponseEntity<String> deletePlan(@PathVariable Integer planId, @PathVariable String status){
+	@GetMapping(ApiUrl.PLAN_BY_ID)
+	public ResponseEntity<Plan> editPlan(@PathVariable Integer planId) {
+		Plan plan = planService.getPlanByID(planId);
+		return new ResponseEntity<>(plan, HttpStatus.OK);
+	}
+
+	@PutMapping(ApiUrl.UPDATE_PLAN_STATUS)
+	public ResponseEntity<String> deletePlan(@PathVariable Integer planId, @PathVariable String status) {
 		boolean planStatusChange = planService.planStatusChange(planId, status);
-		String planStatusMsg ;
-		if(planStatusChange) {
-			planStatusMsg ="Plan Status Updated Successfully..";
-		}else {
-			planStatusMsg ="Plan Status Not Updated..";
+		String planStatusMsg;
+		if (planStatusChange) {
+			planStatusMsg = "Plan Status Updated Successfully..";
+		} else {
+			planStatusMsg = "Plan Status Not Updated..";
 		}
-		return new ResponseEntity<>(planStatusMsg,HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(planStatusMsg, HttpStatus.ACCEPTED);
 	}
 }
